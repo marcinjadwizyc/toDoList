@@ -1,2 +1,1 @@
-# toDoList
-Pure JavaScript To Do List
+# To Do List
