@@ -1,0 +1,80 @@
+.app {
+  width: 40%;
+  font-size: 1.8rem;
+
+  &__input-task {
+    width: 100%;
+
+    padding: 1rem 2rem;
+    font-size: inherit;
+
+    border-radius: 2rem;
+    border: none;
+    background-color: rgba(255, 255, 255, .6);
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__add-task,
+  &__clear-tasks {
+    width: 130px;
+    padding: 1rem 2rem;
+
+    font-size: inherit;
+
+    border-radius: 2rem;
+    border: none;
+
+    cursor: pointer;
+
+    transition: background-color .4s;
+
+    background-color: rgba(255, 255, 255, .6);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, .8);
+    }
+  }
+
+  &__list {
+    list-style: none;
+  }
+
+  &__item {
+    padding: 1rem 2rem;
+    background-color: rgba(255, 255, 255, .6);
+    border-radius: 2rem;
+
+    &:not(:last-child){
+      margin-bottom: 2rem;
+    }
+  }
+
+  &__icon {
+    transition: color .4s;
+
+    cursor: pointer;
+
+    &:not(:last-child){
+      margin-right: 1rem;
+    }
+
+    &:hover {
+      color: lighten(black, 20%);
+    }
+  }
+}
+
+.task-done {
+  opacity: 0.4;
+
+  .app__task {
+    text-decoration: line-through;
+  }
+
+  .app__icon--done {
+    display: none;
+  }
+}
