@@ -19,13 +19,13 @@ html {
   display: flex;
   justify-content: center;
   padding: 10rem 0; }
+  @media (max-width: 600px) {
+    .container {
+      padding: 2rem 5px; } }
 
 .flex-between {
   display: flex;
   justify-content: space-between; }
-
-.icons-box {
-  padding: 0 1rem; }
 
 .u-margin-bottom-s {
   margin-bottom: 2rem; }
@@ -47,6 +47,15 @@ html {
 .app {
   width: 40%;
   font-size: 1.8rem; }
+  @media (max-width: 1200px) {
+    .app {
+      width: 60%; } }
+  @media (max-width: 900px) {
+    .app {
+      width: 80%; } }
+  @media (max-width: 600px) {
+    .app {
+      width: 100%; } }
   .app__input-task {
     width: 100%;
     padding: 1rem 2rem;
@@ -78,14 +87,5 @@ html {
   .app__icon {
     transition: color .4s;
     cursor: pointer; }
-    .app__icon:not(:last-child) {
-      margin-right: 1rem; }
     .app__icon:hover {
       color: #333333; }
-
-.task-done {
-  opacity: 0.4; }
-  .task-done .app__task {
-    text-decoration: line-through; }
-  .task-done .app__icon--done {
-    display: none; }
