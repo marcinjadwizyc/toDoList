@@ -56,6 +56,9 @@ html {
   @media (max-width: 600px) {
     .app {
       width: 100%; } }
+  @media (max-width: 350px) {
+    .app {
+      font-size: 1.6rem; } }
   .app__input-task {
     width: 100%;
     padding: 1rem 2rem;
@@ -76,6 +79,9 @@ html {
     background-color: rgba(255, 255, 255, 0.6); }
     .app__add-task:hover, .app__clear-tasks:hover {
       background-color: rgba(255, 255, 255, 0.8); }
+    @media (max-width: 900px) {
+      .app__add-task:hover, .app__clear-tasks:hover {
+        background-color: rgba(255, 255, 255, 0.6); } }
   .app__list {
     list-style: none; }
   .app__item {
@@ -85,7 +91,12 @@ html {
     .app__item:not(:last-child) {
       margin-bottom: 2rem; }
   .app__icon {
-    transition: color .4s;
+    transition: color .2s;
     cursor: pointer; }
+    .app__icon:not(:last-child) {
+      margin-right: 1rem; }
     .app__icon:hover {
-      color: #333333; }
+      color: #666666; }
+    @media (max-width: 900px) {
+      .app__icon:hover {
+        color: black; } }
