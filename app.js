@@ -42,7 +42,7 @@ let ui = (function(){
       domElements.tasksList.appendChild(task);
     },
 
-    removeTaskFromList: function(){
+    removeTaskFromList: function(event){
       event.target.parentElement.remove();
     },
 
@@ -74,7 +74,7 @@ let data = (function(){
       setLocalStorage(tasksArray);
     },
 
-    removeTaskFromLocalStorage: function(){
+    removeTaskFromLocalStorage: function(event){
       let tasksArray = this.getLocalStorage();
 
       let taskTitle = event.target.previousSibling.innerText;
@@ -128,11 +128,11 @@ let controller = (function(uiModule, dataModule){
       }
     });
 
-    domElements.tasksList.addEventListener("click", function(){
+    domElements.tasksList.addEventListener("click", function(event){
       if (event.target.classList.contains("app__icon--done")){
-        dataModule.removeTaskFromLocalStorage();
+        dataModule.removeTaskFromLocalStorage(event);
 
-        uiModule.removeTaskFromList();
+        uiModule.removeTaskFromList(event);
       }
     });
 
