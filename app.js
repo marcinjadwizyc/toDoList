@@ -1,7 +1,15 @@
 let ui = (function(){
+
+  let domElements = {
+    taskInput: document.querySelector(".app__input-task"),
+    addTaskBtn: document.querySelector(".app__add-task"),
+    clearTasksBtn: document.querySelector(".app__clear-tasks"),
+    tasksList: document.querySelector(".app__list")
+  }
+
   let constructTask = function(taskSource){
-    let listItem = document.createElement("li");
-    listItem.className = "app__item flex-between";
+    let item = document.createElement("li");
+    item.className = "app__item flex-between";
 
     let taskTitle = document.createElement("p");
     taskTitle.className = "app__task";
@@ -10,145 +18,137 @@ let ui = (function(){
     let icon = document.createElement("i");
     icon.className = "app__icon app__icon--done fas fa-check";
 
-    listItem.appendChild(taskTitle);
-    listItem.appendChild(icon);
+    item.appendChild(taskTitle);
+    item.appendChild(icon);
 
-    return listItem;
-  }
-
-  let addTaskToList = function(taskSource){
-    let task = constructTask(taskSource);
-    document.querySelector(".app__list").appendChild(task);
-  }
-
-  let clearTaskInput = function(){
-    document.querySelector(".app__input-task").value = "";
-  }
-
-  let removeTaskFromList = function(){
-    if (event.target.classList.contains("app__icon--done")){
-      event.target.parentElement.remove();
-    }
-  }
-
-  let clearTaskList = function(){
-    document.querySelector(".app__list").innerHTML = "";
-  }
-
-  let showAlert = function(){
-    alert("Please write in a task.");
+    return item;
   }
 
   return {
-    addTaskToList: function(taskSource){
-      addTaskToList(taskSource);
-    },
-
-    removeTaskFromList: function(){
-      removeTaskFromList();
+    getDomElements: function(){
+      return domElements;
     },
 
     clearTaskInput: function(){
-      clearTaskInput();
+      domElements.taskInput.value = "";
     },
 
-    clearTaskList: function(){
-      clearTaskList();
+    getTaskInput: function(){
+      return domElements.taskInput.value;
+    },
+
+    addTaskToList: function(taskSource){
+      let task = constructTask(taskSource);
+      domElements.tasksList.appendChild(task);
+    },
+
+    removeTaskFromList: function(){
+      event.target.parentElement.remove();
+    },
+
+    clearTasksList: function(){
+      domElements.tasksList.innerHTML = "";
     },
 
     showAlert: function(){
-      showAlert();
+      alert("Please write in a task.");
     }
   }
 
 })();
 
 let data = (function(){
-  let getLocalStorage = function(){
-    return JSON.parse(localStorage.getItem("tasks"));
-  }
 
-  let updateLocalStorage = function(data){
-    localStorage.setItem("tasks", JSON.stringify(data));
-  }
-
-  let clearLocalStorage = function(){
-    let tasksData = [];
-    updateLocalStorage(tasksData);
-  }
-
-  let addTaskToLocalStorage = function(){
-    let tasksData = getLocalStorage();
-
-    tasksData.push(document.querySelector(".app__input-task").value);
-
-    updateLocalStorage(tasksData);
-  }
-
-  let removeTaskFromLocalStorage = function(){
-    let tasksData = getLocalStorage();
-
-    let target = event.target.previousSibling.innerText;
-
-    let targetIndex = tasksData.indexOf(target);
-
-    tasksData.splice(targetIndex, 1);
-
-    updateLocalStorage(tasksData);
+  let setLocalStorage = function(dataToStore){
+    localStorage.setItem("tasks", JSON.stringify(dataToStore));
   }
 
   return {
-    localStorageData: getLocalStorage(),
-
-    clearLocalStorage: function(){
-      clearLocalStorage();
+    getLocalStorage: function(){
+      return JSON.parse(localStorage.getItem("tasks"));
     },
 
-    addTaskToLocalStorage: function(){
-      addTaskToLocalStorage();
+    addTaskToLocalStorage: function(taskTitle){
+      let tasksArray = this.getLocalStorage();
+      tasksArray.push(taskTitle);
+      setLocalStorage(tasksArray);
     },
 
     removeTaskFromLocalStorage: function(){
-      removeTaskFromLocalStorage();
+      let tasksArray = this.getLocalStorage();
+
+      let taskTitle = event.target.previousSibling.innerText;
+
+      let indexOfTask = tasksArray.indexOf(taskTitle);
+
+      tasksArray.splice(indexOfTask, 1);
+
+      setLocalStorage(tasksArray);
+    },
+
+    clearLocalStorage: function(){
+      localStorage.setItem("tasks", JSON.stringify([]));
+    },
+
+    initLocalStorage: function(){
+      if(localStorage.hasOwnProperty("tasks") === false){
+        localStorage.setItem("tasks", JSON.stringify([]));
+      }
     }
   }
 
 })();
 
 let controller = (function(uiModule, dataModule){
-  let initializeApp = function(){
-    let tasksData = dataModule.localStorageData;
+  let domElements = uiModule.getDomElements();
 
-    for(let i = 0; i < tasksData.length; i++){
-      uiModule.addTaskToList(tasksData[i]);
+  let initTasks = function(){
+    dataModule.initLocalStorage();
+
+    tasksArray = dataModule.getLocalStorage();
+
+    for(let i = 0; i < tasksArray.length; i++){
+      uiModule.addTaskToList(tasksArray[i]);
+    };
+  }
+
+  let setEventListeners = function(){
+    window.onload = () => initTasks();
+
+    domElements.addTaskBtn.addEventListener("click", function(event){
+      event.preventDefault();
+
+      if(uiModule.getTaskInput() === ""){
+        uiModule.showAlert();
+      } else {
+        dataModule.addTaskToLocalStorage(uiModule.getTaskInput());
+
+        uiModule.addTaskToList(uiModule.getTaskInput());
+        uiModule.clearTaskInput();
+      }
+    });
+
+    domElements.tasksList.addEventListener("click", function(){
+      if (event.target.classList.contains("app__icon--done")){
+        dataModule.removeTaskFromLocalStorage();
+
+        uiModule.removeTaskFromList();
+      }
+    });
+
+    domElements.clearTasksBtn.addEventListener("click", function(){
+      dataModule.clearLocalStorage();
+
+      uiModule.clearTasksList();
+    })
+  }
+
+  return {
+    init: function(){
+      setEventListeners();
     }
   }
 
-  window.onload = () => initializeApp();
-
-  let taskInput = document.querySelector(".app__input-task");
-
-  document.querySelector(".app__add-task").addEventListener("click", function(event){
-    event.preventDefault();
-
-    if(taskInput.value === ""){
-      uiModule.showAlert();
-    } else {
-      dataModule.addTaskToLocalStorage();
-      uiModule.addTaskToList(taskInput.value);
-
-      uiModule.clearTaskInput();
-    }
-  });
-
-  document.querySelector(".app__list").addEventListener("click", function(){
-    dataModule.removeTaskFromLocalStorage();
-    uiModule.removeTaskFromList();
-  });
-
-  document.querySelector(".app__clear-tasks").addEventListener("click", function(){
-    dataModule.clearLocalStorage();
-    uiModule.clearTaskList();
-  })
-
 })(ui, data);
+
+controller.init();
