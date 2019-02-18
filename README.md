@@ -1,4 +1,7 @@
-# Pure JS To Do List
-Small To Do List project using pure JavaScript with modular design.
-It allows for adding/removing tasks while using local storage to save
-the tasks data.
+# Pure JavaScript To Do List
+Functions:
+* Add task
+* Remove task
+* Remove all tasks
+* Add/remove tasks to browser local storage
+* Each session starts with loading the previous tasks saved in browser local storage

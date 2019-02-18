@@ -1,27 +1,21 @@
-let ui = (function(){
+const ui = (function(){
 
-  let domElements = {
+  const domElements = {
     taskInput: document.querySelector(".app__input-task"),
     addTaskBtn: document.querySelector(".app__add-task"),
     clearTasksBtn: document.querySelector(".app__clear-tasks"),
     tasksList: document.querySelector(".app__list")
   }
 
-  let constructTask = function(taskSource){
-    let item = document.createElement("li");
-    item.className = "app__item flex-between";
+  const constructTask = function(taskSource){
+    const taskMarkup = `
+      <li class="app__item flex-between">
+        <p class="app__task">${taskSource}</p>
+        <i class="app__icon app__icon--done fas fa-check"></i>
+      </li>
+    `;
 
-    let taskTitle = document.createElement("p");
-    taskTitle.className = "app__task";
-    taskTitle.innerText = taskSource;
-
-    let icon = document.createElement("i");
-    icon.className = "app__icon app__icon--done fas fa-check";
-
-    item.appendChild(taskTitle);
-    item.appendChild(icon);
-
-    return item;
+    return taskMarkup;
   }
 
   return {
@@ -38,8 +32,8 @@ let ui = (function(){
     },
 
     addTaskToList: function(taskSource){
-      let task = constructTask(taskSource);
-      domElements.tasksList.appendChild(task);
+      const task = constructTask(taskSource);
+      domElements.tasksList.innerHTML += task;
     },
 
     removeTaskFromList: function(event){
@@ -57,9 +51,9 @@ let ui = (function(){
 
 })();
 
-let data = (function(){
+const data = (function(){
 
-  let setLocalStorage = function(dataToStore){
+  const setLocalStorage = function(dataToStore){
     localStorage.setItem("tasks", JSON.stringify(dataToStore));
   }
 
@@ -77,9 +71,9 @@ let data = (function(){
     removeTaskFromLocalStorage: function(event){
       let tasksArray = this.getLocalStorage();
 
-      let taskTitle = event.target.previousSibling.innerText;
+      const taskTitle = event.target.previousSibling.innerText;
 
-      let indexOfTask = tasksArray.indexOf(taskTitle);
+      const indexOfTask = tasksArray.indexOf(taskTitle);
 
       tasksArray.splice(indexOfTask, 1);
 
@@ -99,20 +93,20 @@ let data = (function(){
 
 })();
 
-let controller = (function(uiModule, dataModule){
-  let domElements = uiModule.getDomElements();
+const controller = (function(uiModule, dataModule){
+  const domElements = uiModule.getDomElements();
 
-  let initTasks = function(){
+  const initTasks = function(){
     dataModule.initLocalStorage();
 
-    tasksArray = dataModule.getLocalStorage();
+    let tasksArray = dataModule.getLocalStorage();
 
     for(let i = 0; i < tasksArray.length; i++){
       uiModule.addTaskToList(tasksArray[i]);
     };
   }
 
-  let setEventListeners = function(){
+  const setEventListeners = function(){
     window.onload = () => initTasks();
 
     domElements.addTaskBtn.addEventListener("click", function(event){
