@@ -7,10 +7,11 @@ import TaskList from "./Components/TaskList";
 class App extends Component {
 	state = {
 		taskInputValue: "",
-		tasks: [ "Task 1", "Task 2", "Task 3" ]
+		lastID: 10000,
+		tasks: []
 	};
 
-	updateTaskInputValue = (event) => {
+	updateInputValueHandler = (event) => {
 		const newTaskInputValue = event.target.value;
 
 		this.setState({
@@ -18,12 +19,55 @@ class App extends Component {
 		});
 	};
 
+	addTaskHandler = (event) => {
+		event.preventDefault();
+
+		const presentInput = this.state.taskInputValue;
+
+		if (presentInput.length > 0) {
+			const newTasks = [ ...this.state.tasks, { taskValue: presentInput, id: this.state.lastID + 1 } ];
+
+			this.setState({
+				taskInputValue: "",
+				lastID: this.state.lastID + 1,
+				tasks: newTasks
+			});
+		}
+	};
+
+	removeTaskHandler = (event) => {
+		const taskID = Number(event.target.parentElement.getAttribute("id"));
+		const tasks = [ ...this.state.tasks ];
+
+		const taskIndex = tasks.findIndex((task) => {
+			return task.id === taskID;
+		});
+
+		tasks.splice(taskIndex, 1);
+
+		this.setState({
+			tasks: tasks
+		});
+	};
+
+	clearTasksHandler = () => {
+		this.setState({
+			taskInputValue: "",
+			tasks: []
+		});
+	};
+
 	render() {
 		return (
 			<main className="app">
 				<Background />
-				<TaskForm taskInputValue={this.state.taskInputValue} changeFunc={this.updateTaskInputValue} />
-				<TaskList tasks={this.state.tasks} />
+				<TaskForm
+					taskInputValue={this.state.taskInputValue}
+					changeFunc={this.updateInputValueHandler}
+					submitFunc={this.addTaskHandler}
+					clearFunc={this.clearTasksHandler}
+				/>
+				<TaskList tasks={this.state.tasks} clickFunc={this.removeTaskHandler} />
 			</main>
 		);
 	}

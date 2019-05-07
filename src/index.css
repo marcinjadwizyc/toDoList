@@ -72,3 +72,13 @@ body {
 .task-list > *:not(:last-child) {
 	margin-bottom: 20px;
 }
+
+.task-list__task {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.task-list__icon {
+	cursor: pointer;
+}

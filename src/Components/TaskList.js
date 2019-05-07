@@ -4,7 +4,11 @@ import Task from "./Task";
 
 const TaskList = (props) => {
 	const tasks = props.tasks.map((task) => {
-		return <Task>{task}</Task>;
+		return (
+			<Task key={task.id} idProp={task.id} removeFunc={props.clickFunc}>
+				{task.taskValue}
+			</Task>
+		);
 	});
 
 	return <ul className="task-list">{tasks}</ul>;
