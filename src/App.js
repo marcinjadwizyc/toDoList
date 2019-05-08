@@ -7,9 +7,23 @@ import TaskList from "./Components/TaskList";
 class App extends Component {
 	state = {
 		taskInputValue: "",
-		lastID: 10000,
+		lastID: JSON.parse(localStorage.getItem("lastID")) || 10000,
 		tasks: []
 	};
+
+	componentDidMount() {
+		let lsTasks;
+
+		if (JSON.parse(localStorage.getItem("tasks")) !== null) {
+			lsTasks = JSON.parse(localStorage.getItem("tasks"));
+		} else {
+			lsTasks = [];
+		}
+
+		this.setState({
+			tasks: lsTasks
+		});
+	}
 
 	updateInputValueHandler = (event) => {
 		const newTaskInputValue = event.target.value;
@@ -26,6 +40,9 @@ class App extends Component {
 
 		if (presentInput.length > 0) {
 			const newTasks = [ ...this.state.tasks, { taskValue: presentInput, id: this.state.lastID + 1 } ];
+
+			localStorage.setItem("tasks", JSON.stringify(newTasks));
+			localStorage.setItem("lastID", this.state.lastID + 1);
 
 			this.setState({
 				taskInputValue: "",
@@ -45,12 +62,16 @@ class App extends Component {
 
 		tasks.splice(taskIndex, 1);
 
+		localStorage.setItem("tasks", JSON.stringify(tasks));
+
 		this.setState({
 			tasks: tasks
 		});
 	};
 
 	clearTasksHandler = () => {
+		localStorage.removeItem("tasks");
+
 		this.setState({
 			taskInputValue: "",
 			tasks: []
