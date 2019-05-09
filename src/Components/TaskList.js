@@ -3,9 +3,9 @@ import React from "react";
 import Task from "./Task";
 
 const TaskList = (props) => {
-	const tasks = props.tasks.map((task) => {
+	const tasks = props.tasksData.map((task) => {
 		return (
-			<Task key={task.id} idProp={task.id} removeFunc={props.clickFunc}>
+			<Task key={task.id} taskID={task.id} removeFunc={props.clickFunc}>
 				{task.taskValue}
 			</Task>
 		);

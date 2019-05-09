@@ -7,29 +7,27 @@ import TaskList from "./Components/TaskList";
 class App extends Component {
 	state = {
 		taskInputValue: "",
-		lastID: JSON.parse(localStorage.getItem("lastID")) || 10000,
+		lastID: 10000,
 		tasks: []
 	};
 
 	componentDidMount() {
-		let lsTasks;
+		const localStorageData = {
+			lastID: JSON.parse(localStorage.getItem("lastID")),
+			tasks: JSON.parse(localStorage.getItem("tasks"))
+		};
 
-		if (JSON.parse(localStorage.getItem("tasks")) !== null) {
-			lsTasks = JSON.parse(localStorage.getItem("tasks"));
-		} else {
-			lsTasks = [];
+		if ((localStorageData.tasks !== null) & (localStorageData.lastID !== null)) {
+			this.setState({
+				lastID: localStorageData.lastID,
+				tasks: localStorageData.tasks
+			});
 		}
-
-		this.setState({
-			tasks: lsTasks
-		});
 	}
 
 	updateInputValueHandler = (event) => {
-		const newTaskInputValue = event.target.value;
-
 		this.setState({
-			taskInputValue: newTaskInputValue
+			taskInputValue: event.target.value
 		});
 	};
 
@@ -37,16 +35,17 @@ class App extends Component {
 		event.preventDefault();
 
 		const presentInput = this.state.taskInputValue;
+		const presentID = this.state.lastID;
 
 		if (presentInput.length > 0) {
-			const newTasks = [ ...this.state.tasks, { taskValue: presentInput, id: this.state.lastID + 1 } ];
+			const newTasks = [ ...this.state.tasks, { taskValue: presentInput, id: presentID + 1 } ];
 
 			localStorage.setItem("tasks", JSON.stringify(newTasks));
 			localStorage.setItem("lastID", this.state.lastID + 1);
 
 			this.setState({
 				taskInputValue: "",
-				lastID: this.state.lastID + 1,
+				lastID: presentID + 1,
 				tasks: newTasks
 			});
 		}
@@ -88,7 +87,7 @@ class App extends Component {
 					submitFunc={this.addTaskHandler}
 					clearFunc={this.clearTasksHandler}
 				/>
-				<TaskList tasks={this.state.tasks} clickFunc={this.removeTaskHandler} />
+				<TaskList tasksData={this.state.tasks} clickFunc={this.removeTaskHandler} />
 			</main>
 		);
 	}
