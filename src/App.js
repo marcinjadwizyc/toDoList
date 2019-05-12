@@ -12,11 +12,22 @@ class App extends Component {
 		tasks: []
 	};
 
-	componentDidMount() {
-		const localStorageData = {
+	// LS methods
+	lsGetData = () => {
+		return {
 			lastID: JSON.parse(localStorage.getItem("lastID")),
 			tasks: JSON.parse(localStorage.getItem("tasks"))
 		};
+	};
+
+	lsSetData = (tasksArray) => {
+		localStorage.setItem("tasks", JSON.stringify(tasksArray));
+		localStorage.setItem("lastID", this.state.lastID + 1);
+	};
+
+	// Get data on component mount
+	componentDidMount() {
+		const localStorageData = this.lsGetData();
 
 		if ((localStorageData.tasks !== null) & (localStorageData.lastID !== null)) {
 			this.setState({
@@ -39,10 +50,16 @@ class App extends Component {
 		const presentID = this.state.lastID;
 
 		if (presentInput.length > 0) {
-			const newTasks = [ ...this.state.tasks, { taskValue: presentInput, id: presentID + 1, done: false } ];
+			const newTasks = [
+				...this.state.tasks,
+				{
+					taskValue: presentInput,
+					id: presentID + 1,
+					done: false
+				}
+			];
 
-			localStorage.setItem("tasks", JSON.stringify(newTasks));
-			localStorage.setItem("lastID", this.state.lastID + 1);
+			this.lsSetData(newTasks);
 
 			this.setState({
 				taskInputValue: "",
@@ -52,17 +69,23 @@ class App extends Component {
 		}
 	};
 
+	findTaskIndex = (tasksArray, taskID) => {
+		const taskIndex = tasksArray.findIndex((task) => {
+			return task.id === taskID;
+		});
+
+		return taskIndex;
+	};
+
 	removeTaskHandler = (event) => {
 		const taskID = Number(event.target.parentElement.parentElement.getAttribute("id"));
 		const tasks = [ ...this.state.tasks ];
 
-		const taskIndex = tasks.findIndex((task) => {
-			return task.id === taskID;
-		});
+		const taskIndex = this.findTaskIndex(tasks, taskID);
 
 		tasks.splice(taskIndex, 1);
 
-		localStorage.setItem("tasks", JSON.stringify(tasks));
+		this.lsSetData(tasks);
 
 		this.setState({
 			tasks: tasks
@@ -73,13 +96,11 @@ class App extends Component {
 		const taskID = Number(event.target.parentElement.parentElement.getAttribute("id"));
 		const tasks = [ ...this.state.tasks ];
 
-		const taskIndex = tasks.findIndex((task) => {
-			return task.id === taskID;
-		});
+		const taskIndex = this.findTaskIndex(tasks, taskID);
 
 		tasks[taskIndex].done = true;
 
-		localStorage.setItem("tasks", JSON.stringify(tasks));
+		this.lsSetData(tasks);
 
 		this.setState({
 			tasks: tasks
