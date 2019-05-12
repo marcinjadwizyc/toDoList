@@ -6,13 +6,13 @@ import TaskList from "./TaskList";
 const Tasks = (props) => {
 	let doneList;
 
-	if (props.doneVisible) {
+	if (props.doneListVisible) {
 		doneList = (
 			<TaskList
 				tasksData={props.tasksData}
 				doneList={true}
-				removeFunc={props.removeFunc}
-				doneFunc={props.doneFunc}
+				removeTaskFunc={props.removeTaskFunc}
+				doneTaskFunc={props.doneTaskFunc}
 			/>
 		);
 	} else {
@@ -24,11 +24,11 @@ const Tasks = (props) => {
 			<TaskList
 				tasksData={props.tasksData}
 				doneList={false}
-				removeFunc={props.removeFunc}
-				doneFunc={props.doneFunc}
+				removeTaskFunc={props.removeTaskFunc}
+				doneTaskFunc={props.doneTaskFunc}
 			/>
 			<div className="doneTasks">
-				<Btn styles="btn--finished" clickFunc={props.btnClickFunc}>
+				<Btn styles="btn--finished" clickFunc={props.showDoneTasksFunc}>
 					Show done tasks
 				</Btn>
 				{doneList}

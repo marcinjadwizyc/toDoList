@@ -6,7 +6,7 @@ import Tasks from "./Components/Tasks";
 
 class App extends Component {
 	state = {
-		doneVisible: false,
+		doneListVisible: false,
 		taskInputValue: "",
 		lastID: 10000,
 		tasks: []
@@ -117,10 +117,10 @@ class App extends Component {
 	};
 
 	showDoneTasksHandler = () => {
-		const doneTasksStatus = this.state.doneVisible;
+		const doneTasksStatus = this.state.doneListVisible;
 
 		this.setState({
-			doneVisible: !doneTasksStatus
+			doneListVisible: !doneTasksStatus
 		});
 	};
 
@@ -130,16 +130,16 @@ class App extends Component {
 				<Background />
 				<TaskForm
 					taskInputValue={this.state.taskInputValue}
-					changeFunc={this.updateInputValueHandler}
-					submitFunc={this.addTaskHandler}
-					clearFunc={this.clearTasksHandler}
+					inputChangeFunc={this.updateInputValueHandler}
+					submitFormFunc={this.addTaskHandler}
+					clearTasksFunc={this.clearTasksHandler}
 				/>
 				<Tasks
 					tasksData={this.state.tasks}
-					btnClickFunc={this.showDoneTasksHandler}
-					removeFunc={this.removeTaskHandler}
-					doneFunc={this.doneTaskHandler}
-					doneVisible={this.state.doneVisible}
+					showDoneTasksFunc={this.showDoneTasksHandler}
+					removeTaskFunc={this.removeTaskHandler}
+					doneTaskFunc={this.doneTaskHandler}
+					doneListVisible={this.state.doneListVisible}
 				/>
 			</main>
 		);

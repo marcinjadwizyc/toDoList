@@ -7,8 +7,8 @@ const Task = (props) => {
 		<li className={styles} id={props.taskID}>
 			{props.children}
 			<div className="task__container-icon">
-				<i className="task__icon fas fa-trash-alt" onClick={props.removeFunc} />
-				<i className="task__icon fas fa-check" onClick={props.doneFunc} />
+				<i className="task__icon fas fa-trash-alt" onClick={props.removeTaskFunc} title="Remove task" />
+				<i className="task__icon fas fa-check" onClick={props.doneTaskFunc} title="Mark task as done" />
 			</div>
 		</li>
 	);

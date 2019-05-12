@@ -1,1 +1,19 @@
+.taskForm__input,
+.btn,
+.task__icon {
+	transition: $transition-time;
+}
 
+.taskForm__input:hover,
+.taskForm__input:focus,
+.taskForm__input:active,
+.btn:hover,
+.btn:focus {
+	border-color: $blue-dark;
+	background-color: rgba(255, 255, 255, .8);
+}
+
+.task__icon:hover,
+.task__icon:focus {
+	color: $blue-dark;
+}

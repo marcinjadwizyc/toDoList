@@ -15,8 +15,8 @@ const TaskList = (props) => {
 				styles={styles}
 				key={task.id}
 				taskID={task.id}
-				removeFunc={props.removeFunc}
-				doneFunc={props.doneFunc}
+				removeTaskFunc={props.removeTaskFunc}
+				doneTaskFunc={props.doneTaskFunc}
 			>
 				{task.taskValue}
 			</Task>
