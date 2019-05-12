@@ -2,17 +2,17 @@ import React from "react";
 
 const TaskForm = (props) => {
 	return (
-		<form className="task-form" onSubmit={props.submitFunc}>
+		<form className="taskForm" onSubmit={props.submitFunc}>
 			<input
 				type="text"
-				className="task-form__input"
+				className="taskForm__input"
 				placeholder="Add new task..."
 				value={props.taskInputValue}
 				onChange={props.changeFunc}
 			/>
-			<div className="task-form__buttons">
-				<button className="task-form__btn">Add task</button>
-				<button className="task-form__btn" onClick={props.clearFunc}>
+			<div className="taskForm__container-btn">
+				<button className="btn btn__form">Add task</button>
+				<button className="btn btn__form" onClick={props.clearFunc}>
 					Clear tasks
 				</button>
 			</div>

@@ -1,0 +1,12 @@
+.btn {
+	cursor: pointer;
+	width: 125px;
+
+	@media only screen and (min-width: $mobile-break) {
+		width: 140px;
+	}
+}
+
+.btn__form {
+	@include theme;
+}

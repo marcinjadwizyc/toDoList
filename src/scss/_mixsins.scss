@@ -1,0 +1,8 @@
+@mixin theme {
+	font-size: $theme-font-size;
+	padding: $theme-padding;
+	border: $theme-border;
+	border-radius: $theme-border-radius;
+	background-color: $theme-bcg-color;
+	line-height: $theme-line-height;
+}

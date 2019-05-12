@@ -1,0 +1,14 @@
+.background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+
+	width: 100vw;
+	height: 100vh;
+
+	background-image: linear-gradient(to right, rgba($blue-light, .7), rgba($blue-dark, .7)), url($image-url);
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+}

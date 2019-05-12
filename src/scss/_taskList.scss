@@ -1,0 +1,7 @@
+.taskList {
+	list-style: none;
+}
+
+.taskList > *:not(:last-child) {
+	margin-bottom: 20px;
+}

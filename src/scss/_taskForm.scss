@@ -1,0 +1,15 @@
+.taskForm__input {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.taskForm__input {
+	@include theme;
+}
+
+.taskForm__container-btn {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}

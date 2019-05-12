@@ -11,7 +11,7 @@ const TaskList = (props) => {
 		);
 	});
 
-	return <ul className="task-list">{tasks}</ul>;
+	return <ul className="taskList">{tasks}</ul>;
 };
 
 export default TaskList;
