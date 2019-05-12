@@ -8,4 +8,21 @@
 
 .task__icon {
 	cursor: pointer;
+
+	&:not(:last-child) {
+		margin-right: 10px;
+	}
+}
+
+.task--done {
+	opacity: 0.8;
+	text-decoration: line-through;
+
+	.task__icon:nth-child(1) {
+		margin-right: 0px;
+	}
+
+	.task__icon:nth-child(2) {
+		display: none;
+	}
 }

@@ -1,0 +1,12 @@
+.btn,
+.task__icon {
+	transition: $transition-time;
+}
+
+.btn:hover {
+	background-color: rgba(255, 255, 255, 1);
+}
+
+.task__icon:hover {
+	color: $blue-dark;
+}

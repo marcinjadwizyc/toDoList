@@ -2,10 +2,11 @@ import React, { Component } from "react";
 
 import Background from "./Components/Background";
 import TaskForm from "./Components/TaskForm";
-import TaskList from "./Components/TaskList";
+import Tasks from "./Components/Tasks";
 
 class App extends Component {
 	state = {
+		doneVisible: false,
 		taskInputValue: "",
 		lastID: 10000,
 		tasks: []
@@ -38,7 +39,7 @@ class App extends Component {
 		const presentID = this.state.lastID;
 
 		if (presentInput.length > 0) {
-			const newTasks = [ ...this.state.tasks, { taskValue: presentInput, id: presentID + 1 } ];
+			const newTasks = [ ...this.state.tasks, { taskValue: presentInput, id: presentID + 1, done: false } ];
 
 			localStorage.setItem("tasks", JSON.stringify(newTasks));
 			localStorage.setItem("lastID", this.state.lastID + 1);
@@ -52,7 +53,7 @@ class App extends Component {
 	};
 
 	removeTaskHandler = (event) => {
-		const taskID = Number(event.target.parentElement.getAttribute("id"));
+		const taskID = Number(event.target.parentElement.parentElement.getAttribute("id"));
 		const tasks = [ ...this.state.tasks ];
 
 		const taskIndex = tasks.findIndex((task) => {
@@ -60,6 +61,23 @@ class App extends Component {
 		});
 
 		tasks.splice(taskIndex, 1);
+
+		localStorage.setItem("tasks", JSON.stringify(tasks));
+
+		this.setState({
+			tasks: tasks
+		});
+	};
+
+	doneTaskHandler = (event) => {
+		const taskID = Number(event.target.parentElement.parentElement.getAttribute("id"));
+		const tasks = [ ...this.state.tasks ];
+
+		const taskIndex = tasks.findIndex((task) => {
+			return task.id === taskID;
+		});
+
+		tasks[taskIndex].done = true;
 
 		localStorage.setItem("tasks", JSON.stringify(tasks));
 
@@ -77,6 +95,14 @@ class App extends Component {
 		});
 	};
 
+	showDoneTasksHandler = () => {
+		const doneTasksStatus = this.state.doneVisible;
+
+		this.setState({
+			doneVisible: !doneTasksStatus
+		});
+	};
+
 	render() {
 		return (
 			<main className="app">
@@ -87,7 +113,13 @@ class App extends Component {
 					submitFunc={this.addTaskHandler}
 					clearFunc={this.clearTasksHandler}
 				/>
-				<TaskList tasksData={this.state.tasks} clickFunc={this.removeTaskHandler} />
+				<Tasks
+					tasksData={this.state.tasks}
+					btnClickFunc={this.showDoneTasksHandler}
+					removeFunc={this.removeTaskHandler}
+					doneFunc={this.doneTaskHandler}
+					doneVisible={this.state.doneVisible}
+				/>
 			</main>
 		);
 	}

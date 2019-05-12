@@ -7,6 +7,14 @@
 	}
 }
 
-.btn__form {
+.btn--form {
 	@include theme;
+}
+
+.btn--finished {
+	@include theme;
+	font-size: 14px;
+	padding: 4px 10px;
+	width: 160px;
+	margin-bottom: 20px;
 }

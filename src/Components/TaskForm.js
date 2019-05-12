@@ -13,8 +13,8 @@ const TaskForm = (props) => {
 				onChange={props.changeFunc}
 			/>
 			<div className="taskForm__container-btn">
-				<Btn styles="btn__form">Add task</Btn>
-				<Btn styles="btn__form" clickFunc={props.clearFunc}>
+				<Btn styles="btn--form">Add task</Btn>
+				<Btn styles="btn--form" clickFunc={props.clearFunc}>
 					Clear tasks
 				</Btn>
 			</div>
