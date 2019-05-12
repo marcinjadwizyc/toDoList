@@ -1,5 +1,7 @@
 import React from "react";
 
+import Btn from "./Btn";
+
 const TaskForm = (props) => {
 	return (
 		<form className="taskForm" onSubmit={props.submitFunc}>
@@ -11,10 +13,10 @@ const TaskForm = (props) => {
 				onChange={props.changeFunc}
 			/>
 			<div className="taskForm__container-btn">
-				<button className="btn btn__form">Add task</button>
-				<button className="btn btn__form" onClick={props.clearFunc}>
+				<Btn styles="btn__form">Add task</Btn>
+				<Btn styles="btn__form" clickFunc={props.clearFunc}>
 					Clear tasks
-				</button>
+				</Btn>
 			</div>
 		</form>
 	);
