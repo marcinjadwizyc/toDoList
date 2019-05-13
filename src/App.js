@@ -2,7 +2,8 @@ import React, { Component } from "react";
 
 import Background from "./Components/Background";
 import TaskForm from "./Components/TaskForm";
-import Tasks from "./Components/Tasks";
+import TaskList from "./Components/TaskList";
+import Btn from "./Components/Btn";
 
 class App extends Component {
 	state = {
@@ -125,6 +126,17 @@ class App extends Component {
 	};
 
 	render() {
+		let doneTasks;
+
+		doneTasks = this.state.doneListVisible ? (
+			<TaskList
+				tasksData={this.state.tasks}
+				doneList={true}
+				removeTaskFunc={this.removeTaskHandler}
+				doneTaskFunc={this.doneTaskHandler}
+			/>
+		) : null;
+
 		return (
 			<main className="app">
 				<Background />
@@ -134,13 +146,16 @@ class App extends Component {
 					submitFormFunc={this.addTaskHandler}
 					clearTasksFunc={this.clearTasksHandler}
 				/>
-				<Tasks
+				<TaskList
 					tasksData={this.state.tasks}
-					showDoneTasksFunc={this.showDoneTasksHandler}
+					doneList={false}
 					removeTaskFunc={this.removeTaskHandler}
 					doneTaskFunc={this.doneTaskHandler}
-					doneListVisible={this.state.doneListVisible}
 				/>
+				<Btn styles="btn--finished" clickFunc={this.showDoneTasksHandler}>
+					Show done tasks
+				</Btn>
+				{doneTasks}
 			</main>
 		);
 	}
