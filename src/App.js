@@ -136,14 +136,21 @@ class App extends Component {
 
 		const eventTask = tasksData.splice(taskIndex, 1);
 
-		let newData;
+		let newData = [ ...eventTask, ...tasksData ];
 
 		if (task.classList.contains("task--priority")) {
 			eventTask[0].priority = false;
-			newData = [ ...tasksData, ...eventTask ];
+
+			const priorities = newData.filter((task) => {
+				return task.priority === true;
+			});
+			const pending = newData.filter((task) => {
+				return task.priority === false;
+			});
+
+			newData = [ ...priorities, ...pending ];
 		} else {
 			eventTask[0].priority = true;
-			newData = [ ...eventTask, ...tasksData ];
 		}
 
 		this.lsSetData(newData);
