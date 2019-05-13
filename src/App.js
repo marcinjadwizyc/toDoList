@@ -56,7 +56,8 @@ class App extends Component {
 				{
 					taskValue: presentInput,
 					id: presentID + 1,
-					done: false
+					done: false,
+					priority: false
 				}
 			];
 
@@ -125,6 +126,35 @@ class App extends Component {
 		});
 	};
 
+	priorityTaskHandler = (event) => {
+		const task = event.target.parentElement.parentElement;
+
+		const taskID = Number(task.getAttribute("id"));
+		const tasksData = [ ...this.state.tasks ];
+
+		const taskIndex = this.findTaskIndex(tasksData, taskID);
+
+		const eventTask = tasksData.splice(taskIndex, 1);
+
+		let newData;
+
+		if (task.classList.contains("task--priority")) {
+			eventTask[0].priority = false;
+			newData = [ ...tasksData, ...eventTask ];
+		} else {
+			eventTask[0].priority = true;
+			newData = [ ...eventTask, ...tasksData ];
+		}
+
+		this.lsSetData(newData);
+
+		this.setState({
+			tasks: newData
+		});
+
+		task.classList.toggle("task--priority");
+	};
+
 	render() {
 		let doneTasks;
 
@@ -151,6 +181,7 @@ class App extends Component {
 					doneList={false}
 					removeTaskFunc={this.removeTaskHandler}
 					doneTaskFunc={this.doneTaskHandler}
+					priorityTaskFunc={this.priorityTaskHandler}
 				/>
 				<Btn styles="btn--finished" clickFunc={this.showDoneTasksHandler}>
 					Show done tasks

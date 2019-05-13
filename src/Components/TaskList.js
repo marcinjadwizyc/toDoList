@@ -3,7 +3,7 @@ import React from "react";
 import Task from "./Task";
 
 const TaskList = (props) => {
-	const styles = props.doneList ? "task--done" : "";
+	let styles = props.doneList ? "task--done" : "";
 
 	const data = props.tasksData.filter((task) => {
 		return task.done === props.doneList;
@@ -17,6 +17,8 @@ const TaskList = (props) => {
 				taskID={task.id}
 				removeTaskFunc={props.removeTaskFunc}
 				doneTaskFunc={props.doneTaskFunc}
+				priorityTaskFunc={props.priorityTaskFunc}
+				taskPriority={task.priority}
 			>
 				{task.taskValue}
 			</Task>
