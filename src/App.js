@@ -79,33 +79,38 @@ class App extends Component {
 		return taskIndex;
 	};
 
+	getTaskData = (event) => {
+		return {
+			taskID: Number(event.target.parentElement.parentElement.getAttribute("id")),
+			tasks: [ ...this.state.tasks ]
+		};
+	};
+
 	removeTaskHandler = (event) => {
-		const taskID = Number(event.target.parentElement.parentElement.getAttribute("id"));
-		const tasks = [ ...this.state.tasks ];
+		const taskData = this.getTaskData(event);
 
-		const taskIndex = this.findTaskIndex(tasks, taskID);
+		const taskIndex = this.findTaskIndex(taskData.tasks, taskData.taskID);
 
-		tasks.splice(taskIndex, 1);
+		taskData.tasks.splice(taskIndex, 1);
 
-		this.lsSetData(tasks);
+		this.lsSetData(taskData.tasks);
 
 		this.setState({
-			tasks: tasks
+			tasks: taskData.tasks
 		});
 	};
 
 	doneTaskHandler = (event) => {
-		const taskID = Number(event.target.parentElement.parentElement.getAttribute("id"));
-		const tasks = [ ...this.state.tasks ];
+		const taskData = this.getTaskData(event);
 
-		const taskIndex = this.findTaskIndex(tasks, taskID);
+		const taskIndex = this.findTaskIndex(taskData.tasks, taskData.taskID);
 
-		tasks[taskIndex].done = true;
+		taskData.tasks[taskIndex].done = true;
 
-		this.lsSetData(tasks);
+		this.lsSetData(taskData.tasks);
 
 		this.setState({
-			tasks: tasks
+			tasks: taskData.tasks
 		});
 	};
 
@@ -129,14 +134,13 @@ class App extends Component {
 	priorityTaskHandler = (event) => {
 		const task = event.target.parentElement.parentElement;
 
-		const taskID = Number(task.getAttribute("id"));
-		const tasksData = [ ...this.state.tasks ];
+		const taskData = this.getTaskData(event);
 
-		const taskIndex = this.findTaskIndex(tasksData, taskID);
+		const taskIndex = this.findTaskIndex(taskData.tasks, taskData.taskID);
 
-		const eventTask = tasksData.splice(taskIndex, 1);
+		const eventTask = taskData.tasks.splice(taskIndex, 1);
 
-		let newData = [ ...eventTask, ...tasksData ];
+		let newData = [ ...eventTask, ...taskData.tasks ];
 
 		if (task.classList.contains("task--priority")) {
 			eventTask[0].priority = false;
