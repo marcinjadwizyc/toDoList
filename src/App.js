@@ -2,7 +2,8 @@ import React, { Component } from "react";
 
 import Background from "./Components/Background";
 import TaskForm from "./Components/TaskForm";
-import Tasks from "./Components/Tasks";
+import TaskList from "./Components/TaskList";
+import Btn from "./Components/Btn";
 
 class App extends Component {
 	state = {
@@ -55,7 +56,8 @@ class App extends Component {
 				{
 					taskValue: presentInput,
 					id: presentID + 1,
-					done: false
+					done: false,
+					priority: false
 				}
 			];
 
@@ -124,7 +126,54 @@ class App extends Component {
 		});
 	};
 
+	priorityTaskHandler = (event) => {
+		const task = event.target.parentElement.parentElement;
+
+		const taskID = Number(task.getAttribute("id"));
+		const tasksData = [ ...this.state.tasks ];
+
+		const taskIndex = this.findTaskIndex(tasksData, taskID);
+
+		const eventTask = tasksData.splice(taskIndex, 1);
+
+		let newData = [ ...eventTask, ...tasksData ];
+
+		if (task.classList.contains("task--priority")) {
+			eventTask[0].priority = false;
+
+			const priorities = newData.filter((task) => {
+				return task.priority === true;
+			});
+			const pending = newData.filter((task) => {
+				return task.priority === false;
+			});
+
+			newData = [ ...priorities, ...pending ];
+		} else {
+			eventTask[0].priority = true;
+		}
+
+		this.lsSetData(newData);
+
+		this.setState({
+			tasks: newData
+		});
+
+		task.classList.toggle("task--priority");
+	};
+
 	render() {
+		let doneTasks;
+
+		doneTasks = this.state.doneListVisible ? (
+			<TaskList
+				tasksData={this.state.tasks}
+				doneList={true}
+				removeTaskFunc={this.removeTaskHandler}
+				doneTaskFunc={this.doneTaskHandler}
+			/>
+		) : null;
+
 		return (
 			<main className="app">
 				<Background />
@@ -134,13 +183,17 @@ class App extends Component {
 					submitFormFunc={this.addTaskHandler}
 					clearTasksFunc={this.clearTasksHandler}
 				/>
-				<Tasks
+				<TaskList
 					tasksData={this.state.tasks}
-					showDoneTasksFunc={this.showDoneTasksHandler}
+					doneList={false}
 					removeTaskFunc={this.removeTaskHandler}
 					doneTaskFunc={this.doneTaskHandler}
-					doneListVisible={this.state.doneListVisible}
+					priorityTaskFunc={this.priorityTaskHandler}
 				/>
+				<Btn styles="btn--finished" clickFunc={this.showDoneTasksHandler}>
+					Show done tasks
+				</Btn>
+				{doneTasks}
 			</main>
 		);
 	}
