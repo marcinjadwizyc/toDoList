@@ -20,7 +20,7 @@ const TaskList = (props) => {
 				priorityTaskFunc={props.priorityTaskFunc}
 				taskPriority={task.priority}
 			>
-				{task.taskValue}
+				{task.title}
 			</Task>
 		);
 	});
