@@ -29,8 +29,18 @@ const Task = (props) => {
 			</div>
 			{props.taskOpen ? (
 				<div className="task__extention">
-					<input className="task__title-input" type="text" />
-					<textarea className="task__description-input">Describe your task here...</textarea>
+					<input
+						className="task__title-input"
+						type="text"
+						value={props.taskTitle}
+						onChange={props.changeTaskTitleFunc}
+					/>
+					<textarea
+						className="task__description-input"
+						placeholder="Describe your task here..."
+						value={props.taskDescription}
+						onChange={props.changeTaskDescriptionFunc}
+					/>
 				</div>
 			) : null}
 		</li>

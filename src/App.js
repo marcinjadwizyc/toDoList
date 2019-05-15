@@ -31,6 +31,10 @@ class App extends Component {
 		const storageData = this.storageGetData();
 
 		if ((storageData.tasksData !== null) & (storageData.lastID !== null)) {
+			storageData.tasksData.map((task) => {
+				task.open = false;
+			});
+
 			this.setState({
 				lastID: storageData.lastID,
 				tasksData: storageData.tasksData
@@ -43,6 +47,22 @@ class App extends Component {
 		const taskVariables = {
 			taskDOM: event.target.parentElement.parentElement.parentElement,
 			taskID: Number(event.target.parentElement.parentElement.parentElement.getAttribute("id")),
+			tasksData: [ ...this.state.tasksData ]
+		};
+
+		const taskIndex = taskVariables.tasksData.findIndex((task) => {
+			return task.id === taskVariables.taskID;
+		});
+
+		taskVariables.taskIndex = taskIndex;
+
+		return taskVariables;
+	};
+
+	getTaskInputVariables = (event) => {
+		const taskVariables = {
+			taskDOM: event.target.parentElement.parentElement,
+			taskID: Number(event.target.parentElement.parentElement.getAttribute("id")),
 			tasksData: [ ...this.state.tasksData ]
 		};
 
@@ -174,6 +194,30 @@ class App extends Component {
 		}
 	};
 
+	changeTaskTitleHandler = (event) => {
+		const taskVariables = this.getTaskInputVariables(event);
+
+		taskVariables.tasksData[taskVariables.taskIndex].title = event.target.value;
+
+		this.storageSetData(taskVariables.tasksData);
+
+		this.setState({
+			tasksData: taskVariables.tasksData
+		});
+	};
+
+	changeTaskDescriptionHandler = (event) => {
+		const taskVariables = this.getTaskInputVariables(event);
+
+		taskVariables.tasksData[taskVariables.taskIndex].description = event.target.value;
+
+		this.storageSetData(taskVariables.tasksData);
+
+		this.setState({
+			tasksData: taskVariables.tasksData
+		});
+	};
+
 	render() {
 		let doneList;
 
@@ -184,6 +228,8 @@ class App extends Component {
 				removeTaskFunc={this.removeTaskHandler}
 				doneTaskFunc={this.doneTaskHandler}
 				openTaskFunc={this.openTaskHandler}
+				changeTaskTitleFunc={this.changeTaskTitleHandler}
+				changeTaskDescriptionFunc={this.changeTaskDescriptionHandler}
 			/>
 		) : null;
 
@@ -203,6 +249,8 @@ class App extends Component {
 					doneTaskFunc={this.doneTaskHandler}
 					priorityTaskFunc={this.priorityTaskHandler}
 					openTaskFunc={this.openTaskHandler}
+					changeTaskTitleFunc={this.changeTaskTitleHandler}
+					changeTaskDescriptionFunc={this.changeTaskDescriptionHandler}
 				/>
 				<Btn styles="btn--finished" clickFunc={this.showDoneListHandler}>
 					Show done tasks

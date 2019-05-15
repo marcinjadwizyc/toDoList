@@ -15,12 +15,16 @@ const TaskList = (props) => {
 				styles={styles}
 				key={task.id}
 				taskID={task.id}
+				taskTitle={task.title}
+				taskDescription={task.description}
+				taskPriority={task.priority}
+				taskOpen={task.open}
 				removeTaskFunc={props.removeTaskFunc}
 				doneTaskFunc={props.doneTaskFunc}
 				priorityTaskFunc={props.priorityTaskFunc}
-				taskPriority={task.priority}
-				taskOpen={task.open}
 				openTaskFunc={props.openTaskFunc}
+				changeTaskTitleFunc={props.changeTaskTitleFunc}
+				changeTaskDescriptionFunc={props.changeTaskDescriptionFunc}
 			>
 				{task.title}
 			</Task>
