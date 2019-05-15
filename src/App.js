@@ -41,8 +41,8 @@ class App extends Component {
 	// Utils methods
 	getTaskVariables = (event) => {
 		const taskVariables = {
-			taskDOM: event.target.parentElement.parentElement,
-			taskID: Number(event.target.parentElement.parentElement.getAttribute("id")),
+			taskDOM: event.target.parentElement.parentElement.parentElement,
+			taskID: Number(event.target.parentElement.parentElement.parentElement.getAttribute("id")),
 			tasksData: [ ...this.state.tasksData ]
 		};
 
