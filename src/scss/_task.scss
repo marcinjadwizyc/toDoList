@@ -28,14 +28,21 @@
 	margin-right: 10px;
 }
 
+.task__icons > *:first-child {
+	display: none;
+}
+
 .task--done {
 	.task__main {
 		text-decoration: line-through;
 		opacity: 0.8;
 	}
 
-	.task__icons > *:nth-child(2),
-	.task__icons > *:nth-child(3) {
+	.task__icon:first-child {
+		display: inline-block;
+	}
+
+	.task__icon:not(:first-child) {
 		display: none;
 	}
 
@@ -45,7 +52,7 @@
 }
 
 .task--priority {
-	.task__icons > *:nth-child(2) {
+	.task__icons > *:nth-child(3) {
 		color: red;
 	}
 }

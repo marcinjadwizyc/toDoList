@@ -19,6 +19,8 @@ const TaskList = (props) => {
 				doneTaskFunc={props.doneTaskFunc}
 				priorityTaskFunc={props.priorityTaskFunc}
 				taskPriority={task.priority}
+				taskOpen={task.open}
+				openTaskFunc={props.openTaskFunc}
 			>
 				{task.title}
 			</Task>

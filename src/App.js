@@ -76,7 +76,8 @@ class App extends Component {
 					description: "",
 					id: currentID + 1,
 					done: false,
-					priority: false
+					priority: false,
+					open: false
 				}
 			];
 
@@ -160,6 +161,19 @@ class App extends Component {
 		});
 	};
 
+	openTaskHandler = (event) => {
+		const taskVariables = this.getTaskVariables(event);
+
+		if (taskVariables.tasksData[taskVariables.taskIndex].done === false) {
+			taskVariables.tasksData[taskVariables.taskIndex].open = !taskVariables.tasksData[taskVariables.taskIndex]
+				.open;
+
+			this.setState({
+				tasksData: taskVariables.tasksData
+			});
+		}
+	};
+
 	render() {
 		let doneList;
 
@@ -169,6 +183,7 @@ class App extends Component {
 				doneList={true}
 				removeTaskFunc={this.removeTaskHandler}
 				doneTaskFunc={this.doneTaskHandler}
+				openTaskFunc={this.openTaskHandler}
 			/>
 		) : null;
 
@@ -187,6 +202,7 @@ class App extends Component {
 					removeTaskFunc={this.removeTaskHandler}
 					doneTaskFunc={this.doneTaskHandler}
 					priorityTaskFunc={this.priorityTaskHandler}
+					openTaskFunc={this.openTaskHandler}
 				/>
 				<Btn styles="btn--finished" clickFunc={this.showDoneListHandler}>
 					Show done tasks
