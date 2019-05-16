@@ -3,39 +3,43 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## 1. About
-Ver. 1.1
+Ver. 1.2
 
 Features:
 * Add/remove tasks
 * Save your tasks between sessions
 * Collect done tasks
 * Prioritize your tasks
+* Edit your tasks & describe them
 
 Changes: 
-* Ver 1.1 - Added task priority feature
+* Ver. 1.1 - Added task priority
+* Ver. 1.2 - Added task editing
 
 ## 2. State
 ```{js}
 state = {
-  doneListVisible: false,
+  doneListSwitch: false,
   taskInputValue: "",
   lastID: 10000,
-  tasks: []
+  tasksData: []
 };
 ```
 
 Values: 
-* doneListVisible - flag for conditional rendering of "done" tasks list
+* doneListSwitch - flag for conditional rendering of "done" tasks list
 * taskInputValue - value of the text input used for adding tasks
 * lastID - last ID used in the task object construction
-* tasks - array gathering all tasks objects
+* tasksData - array gathering all tasks objects
 
 ## 3. Task Object
 ```{js}
-{ taskValue: presentInput, 
+{ title: presentInput, 
+  description: "",
   id: presentID + 1, 
   done: false,
-  priority: false }
+  priority: false,
+  open: false }
 ```
 
 ## 4. Local Storage

@@ -12,13 +12,9 @@ const TaskList = (props) => {
 	const tasks = data.map((task) => {
 		return (
 			<Task
-				styles={styles}
 				key={task.id}
-				taskID={task.id}
-				taskTitle={task.title}
-				taskDescription={task.description}
-				taskPriority={task.priority}
-				taskOpen={task.open}
+				styles={styles}
+				taskObj={task}
 				removeTaskFunc={props.removeTaskFunc}
 				doneTaskFunc={props.doneTaskFunc}
 				priorityTaskFunc={props.priorityTaskFunc}

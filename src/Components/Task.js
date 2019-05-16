@@ -5,19 +5,19 @@ const Task = (props) => {
 
 	let priorityTitle = "Add priority";
 
-	if (props.taskPriority) {
+	if (props.taskObj.priority) {
 		styles.push("task--priority");
 		priorityTitle = "Remove priority";
 	}
 
-	if (props.taskOpen) {
+	if (props.taskObj.open) {
 		styles.push("task--open");
 	}
 
 	styles = styles.join(" ");
 
 	return (
-		<li className={styles} id={props.taskID}>
+		<li className={styles} id={props.taskObj.id}>
 			<div className="task__main">
 				{props.children}
 				<div className="task__icons">
@@ -27,18 +27,18 @@ const Task = (props) => {
 					<i className="task__icon fas fa-check" onClick={props.doneTaskFunc} title="Mark task as done" />
 				</div>
 			</div>
-			{props.taskOpen ? (
+			{props.taskObj.open ? (
 				<div className="task__extention">
 					<input
 						className="task__title-input"
 						type="text"
-						value={props.taskTitle}
+						value={props.taskObj.title}
 						onChange={props.changeTaskTitleFunc}
 					/>
 					<textarea
 						className="task__description-input"
 						placeholder="Describe your task here..."
-						value={props.taskDescription}
+						value={props.taskObj.description}
 						onChange={props.changeTaskDescriptionFunc}
 					/>
 				</div>
