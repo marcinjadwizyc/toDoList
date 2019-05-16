@@ -1,6 +1,8 @@
 .taskForm__input,
 .btn,
-.task__icon {
+.task__icon,
+.task__title-input,
+.task__description-input {
 	transition: $transition-time;
 }
 
@@ -16,4 +18,13 @@
 .task__icon:hover,
 .task__icon:focus {
 	color: $blue-dark;
+}
+
+.task__title-input:hover,
+.task__title-input:focus,
+.task__title-input:active,
+.task__description-input:hover,
+.task__description-input:focus,
+.task__description-input:active {
+	border-color: $blue-light;
 }

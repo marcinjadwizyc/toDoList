@@ -3,39 +3,43 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## 1. About
-Ver. 1.1
+Ver. 1.2
 
 Features:
 * Add/remove tasks
 * Save your tasks between sessions
 * Collect done tasks
 * Prioritize your tasks
+* Edit your tasks & describe them
 
 Changes: 
-* Ver 1.1 - Added task priority feature
+* Ver. 1.1 - Added task priority
+* Ver. 1.2 - Added task editing
 
 ## 2. State
 ```{js}
 state = {
-  doneListVisible: false,
+  doneListSwitch: false,
   taskInputValue: "",
   lastID: 10000,
-  tasks: []
+  tasksData: []
 };
 ```
 
 Values: 
-* doneListVisible - flag for conditional rendering of "done" tasks list
+* doneListSwitch - flag for conditional rendering of "done" tasks list
 * taskInputValue - value of the text input used for adding tasks
 * lastID - last ID used in the task object construction
-* tasks - array gathering all tasks objects
+* tasksData - array gathering all tasks objects
 
 ## 3. Task Object
 ```{js}
-{ taskValue: presentInput, 
+{ title: presentInput, 
+  description: "",
   id: presentID + 1, 
   done: false,
-  priority: false }
+  priority: false,
+  open: false }
 ```
 
 ## 4. Local Storage
@@ -54,21 +58,7 @@ Background component with fixed position taking 100% of viewport width & height.
 ```
 Button component used in the input form for 2 roles: Adding tasks & Clearing all tasks. Also used under first task list to toggle visiblity of "done" task list.
 
-### 5.3 Task
-```{js}
-<Task
-  styles={styles}
-  key={task.id}
-  taskID={task.id}
-  removeTaskFunc={props.removeTaskFunc}
-  doneTaskFunc={props.doneTaskFunc}
-  priorityTaskFunc={props.priorityTaskFunc}
-  taskPriority={task.priority}
->
-```
-Single task list item showing task value and 3 icons: remove task, prioritize task & mark task as done. Each task has its own unique ID value and passes functions to icons nested in it.
-
-### 5.4 TaskForm
+### 5.3 TaskForm
 ```{js}
 <TaskForm
   taskInputValue={this.state.taskInputValue}
@@ -79,14 +69,33 @@ Single task list item showing task value and 3 icons: remove task, prioritize ta
 ```
 Form used for new tasks input. Build from one text input and two buttons: Add tasks & Clear all tasks.
 
+### 5.4 Task
+```{js}
+<Task
+  key={task.id}
+  styles={styles}
+  taskObj={task}
+  removeTaskFunc={props.removeTaskFunc}
+  doneTaskFunc={props.doneTaskFunc}
+  priorityTaskFunc={props.priorityTaskFunc}
+  openTaskFunc={props.openTaskFunc}
+  changeTaskTitleFunc={props.changeTaskTitleFunc}
+  changeTaskDescriptionF  {props.changeTaskDescriptionFunc}
+>
+```
+Single task list item showing task value and 3 icons: remove task, prioritize task & mark task as done. Each task has its own unique ID value and passes functions to icons nested in it.
+
 ### 5.5 Task List
 ```{js}
 <TaskList
-  tasksData={this.state.tasks}
+  tasksData={this.state.tasksData}
   doneList={false}
   removeTaskFunc={this.removeTaskHandler}
   doneTaskFunc={this.doneTaskHandler}
   priorityTaskFunc={this.priorityTaskHandler}
+  openTaskFunc={this.openTaskHandler}
+  changeTaskTitle {this.changeTaskTitleHandler}
+  changeTaskDescription {this.changeTaskDescriptionHandler}
 />
 ```
 List of tasks with 2 version - pending tasks & done tasks. Gathers <Task/> components created based on the tasks database from the state.
