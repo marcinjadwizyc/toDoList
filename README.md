@@ -58,21 +58,7 @@ Background component with fixed position taking 100% of viewport width & height.
 ```
 Button component used in the input form for 2 roles: Adding tasks & Clearing all tasks. Also used under first task list to toggle visiblity of "done" task list.
 
-### 5.3 Task
-```{js}
-<Task
-  styles={styles}
-  key={task.id}
-  taskID={task.id}
-  removeTaskFunc={props.removeTaskFunc}
-  doneTaskFunc={props.doneTaskFunc}
-  priorityTaskFunc={props.priorityTaskFunc}
-  taskPriority={task.priority}
->
-```
-Single task list item showing task value and 3 icons: remove task, prioritize task & mark task as done. Each task has its own unique ID value and passes functions to icons nested in it.
-
-### 5.4 TaskForm
+### 5.3 TaskForm
 ```{js}
 <TaskForm
   taskInputValue={this.state.taskInputValue}
@@ -83,14 +69,33 @@ Single task list item showing task value and 3 icons: remove task, prioritize ta
 ```
 Form used for new tasks input. Build from one text input and two buttons: Add tasks & Clear all tasks.
 
+### 5.4 Task
+```{js}
+<Task
+  key={task.id}
+  styles={styles}
+  taskObj={task}
+  removeTaskFunc={props.removeTaskFunc}
+  doneTaskFunc={props.doneTaskFunc}
+  priorityTaskFunc={props.priorityTaskFunc}
+  openTaskFunc={props.openTaskFunc}
+  changeTaskTitleFunc={props.changeTaskTitleFunc}
+  changeTaskDescriptionF  {props.changeTaskDescriptionFunc}
+>
+```
+Single task list item showing task value and 3 icons: remove task, prioritize task & mark task as done. Each task has its own unique ID value and passes functions to icons nested in it.
+
 ### 5.5 Task List
 ```{js}
 <TaskList
-  tasksData={this.state.tasks}
+  tasksData={this.state.tasksData}
   doneList={false}
   removeTaskFunc={this.removeTaskHandler}
   doneTaskFunc={this.doneTaskHandler}
   priorityTaskFunc={this.priorityTaskHandler}
+  openTaskFunc={this.openTaskHandler}
+  changeTaskTitle {this.changeTaskTitleHandler}
+  changeTaskDescription {this.changeTaskDescriptionHandler}
 />
 ```
 List of tasks with 2 version - pending tasks & done tasks. Gathers <Task/> components created based on the tasks database from the state.
