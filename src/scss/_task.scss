@@ -14,7 +14,7 @@
 }
 
 .task__extention {
-	padding-top: 0px;
+	padding-top: 15px;
 	padding-bottom: 15px;
 
 	display: flex;
@@ -59,14 +59,22 @@
 }
 
 .task--open {
-	.task__main {
-		border-bottom-right-radius: 0px;
-		border-bottom-left-radius: 0px;
+	.task__extention {
+		margin-top: 10px;
 	}
 
-	.task__extention {
-		border-top-left-radius: 0px;
-		border-top-right-radius: 0px;
+	@media only screen and (min-width: $mobile-break) {
+		.task__main {
+			border-bottom-left-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
+
+		.task__extention {
+			margin-top: 0px;
+			border-top-left-radius: 0px;
+			border-top-right-radius: 0px;
+			padding-top: 0px;
+		}
 	}
 }
 
@@ -82,7 +90,7 @@
 .task__description-input {
 	font-family: inherit;
 	font-size: 14px;
-	padding: 5px 2px;
+	padding: 5px;
 	border: 2px solid white;
 }
 
