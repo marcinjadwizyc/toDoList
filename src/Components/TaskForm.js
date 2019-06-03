@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Btn from "./Btn";
 
@@ -22,6 +23,13 @@ const TaskForm = (props) => {
 			</div>
 		</form>
 	);
+};
+
+TaskForm.propTypes = {
+	value: PropTypes.string,
+	changeInputValue: PropTypes.func,
+	addTask: PropTypes.func,
+	clearTasks: PropTypes.func
 };
 
 export default TaskForm;
