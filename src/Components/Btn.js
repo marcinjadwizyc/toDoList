@@ -12,7 +12,8 @@ const Btn = (props) => {
 };
 
 Btn.propTypes = {
-	click: PropTypes.func.isRequired
+	click: PropTypes.func.isRequired,
+	styles: PropTypes.string
 };
 
 export default Btn;

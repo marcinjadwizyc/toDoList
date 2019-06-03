@@ -4,13 +4,23 @@ import TaskIcons from "./TaskIcons";
 import TaskInputs from "./TaskInputs";
 
 const Task = (props) => {
+	let styles = [ "task" ];
+	let priorityTitle = "Add priority";
+
+	if (props.data.priority) {
+		styles.push("task--priority");
+		priorityTitle = "Remove priority";
+	} else if (props.data.open) {
+		styles.push("task--open");
+	}
+
 	const inputs = props.data.open ? <TaskInputs /> : null;
 
 	return (
-		<li className="task" id={props.data.id}>
+		<li className={styles.join(" ")} id={props.data.id}>
 			<div className="task__main">
 				{props.children}
-				<TaskIcons />
+				<TaskIcons priorityTitle={priorityTitle} />
 			</div>
 			{inputs}
 		</li>

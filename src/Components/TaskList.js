@@ -3,6 +3,12 @@ import React from "react";
 import Task from "./Task/Task";
 
 const TaskList = (props) => {
+	let styles = [ "taskList" ];
+
+	if (props.isDone) {
+		styles.push("taskList--done");
+	}
+
 	const tasks = props.data.map((task) => {
 		if (task.done === props.isDone) {
 			return (
@@ -10,10 +16,12 @@ const TaskList = (props) => {
 					{task.title}
 				</Task>
 			);
+		} else {
+			return null;
 		}
 	});
 
-	return <ul className="taskList">{tasks}</ul>;
+	return <ul className={styles.join(" ")}>{tasks}</ul>;
 };
 
 export default TaskList;
