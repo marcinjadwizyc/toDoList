@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import Background from "./Components/Background";
 import TaskForm from "./Components/TaskForm";
+import TaskList from "./Components/TaskList";
 
 class App extends Component {
 	state = {
@@ -72,7 +73,8 @@ class App extends Component {
 				id: newID,
 				description: "",
 				priority: false,
-				done: false
+				done: false,
+				open: false
 			};
 
 			const newTasks = [ newTask, ...tasksData ];
@@ -99,6 +101,8 @@ class App extends Component {
 					clearTasks={this.clearTasksDataHandler}
 					addTask={this.addTaskHandler}
 				/>
+				<TaskList data={this.state.tasksData} isDone={false} />
+				<TaskList data={this.state.tasksData} isDone={true} />
 			</main>
 		);
 	}
