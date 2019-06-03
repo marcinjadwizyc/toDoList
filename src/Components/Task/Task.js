@@ -5,12 +5,11 @@ import TaskInputs from "./TaskInputs";
 
 const Task = (props) => {
 	return (
-		<li className="task" id={props.taskObj.id}>
+		<li className="task">
 			<div className="task__main">
 				{props.children}
 				<TaskIcons />
 			</div>
-			{props.taskObj.open ? <TaskInputs /> : null}
 		</li>
 	);
 };
