@@ -12,7 +12,11 @@ const TaskIcons = (props) => {
 				title="Remove task"
 				onClick={(event) => context.changeTaskStatus(event, "delete")}
 			/>
-			<i className="task__icon fas fa-edit" title="Edit task" />
+			<i
+				className="task__icon fas fa-edit"
+				title="Edit task"
+				onClick={(event) => context.changeTaskStatus(event, "open")}
+			/>
 			<i className="task__icon fas fa-star" title={props.priorityTitle} />
 			<i
 				className="task__icon fas fa-check"

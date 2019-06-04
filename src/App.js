@@ -16,12 +16,18 @@ class App extends Component {
 	};
 
 	componentDidMount() {
-		const lsData = this.lsGetData();
+		let lsData = this.lsGetData();
 
 		if (lsData.data !== null && lsData.lastID !== null) {
+			let { data, id } = lsData;
+
+			data.map((task) => {
+				task.open = false;
+			});
+
 			this.setState({
-				tasksData: lsData.data,
-				lastID: lsData.id
+				tasksData: data,
+				lastID: id
 			});
 		}
 	}
@@ -103,7 +109,7 @@ class App extends Component {
 		});
 	};
 
-	// Task methods
+	// TaskIcons methods
 	getTaskHandler = (event) => {
 		const taskID = Number(event.target.closest(".task").getAttribute("id"));
 
@@ -135,6 +141,16 @@ class App extends Component {
 		return newTasksData;
 	};
 
+	openTaskHandler = (data) => {
+		const { newTasksData, taskArrayIndex } = data;
+
+		const openValue = newTasksData[taskArrayIndex].open;
+
+		newTasksData[taskArrayIndex].open = !openValue;
+
+		return newTasksData;
+	};
+
 	changeTaskStatusHandler = (event, action) => {
 		let newTasksData;
 
@@ -144,6 +160,8 @@ class App extends Component {
 			newTasksData = this.markDoneTaskHandler(data);
 		} else if (action === "delete") {
 			newTasksData = this.removeTaskHandler(data);
+		} else if (action === "open") {
+			newTasksData = this.openTaskHandler(data);
 		}
 
 		this.lsSetData(newTasksData, this.state.lastID);
