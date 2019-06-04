@@ -14,7 +14,7 @@ const Task = (props) => {
 		styles.push("task--open");
 	}
 
-	const inputs = props.data.open ? <TaskInputs /> : null;
+	const inputs = props.data.open ? <TaskInputs data={props.data} /> : null;
 
 	return (
 		<li className={styles.join(" ")} id={props.data.id}>
