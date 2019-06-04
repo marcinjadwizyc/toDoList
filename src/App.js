@@ -3,6 +3,9 @@ import React, { Component } from "react";
 import Background from "./Components/Background";
 import TaskForm from "./Components/TaskForm";
 import TaskList from "./Components/TaskList";
+import Btn from "./Components/Btn";
+
+import TaskContext from "./Context/taskContext";
 
 class App extends Component {
 	state = {
@@ -91,7 +94,68 @@ class App extends Component {
 		}
 	};
 
+	// Show done list
+	showDoneListHandler = () => {
+		const presentStatus = this.state.isDoneListVisible;
+
+		this.setState({
+			isDoneListVisible: !presentStatus
+		});
+	};
+
+	// Task methods
+	getTaskHandler = (event) => {
+		const taskID = Number(event.target.closest(".task").getAttribute("id"));
+
+		const tasksData = [ ...this.state.tasksData ];
+
+		const taskArrayIndex = tasksData.findIndex((task) => {
+			return task.id === taskID;
+		});
+
+		return {
+			newTasksData: tasksData,
+			taskArrayIndex: taskArrayIndex
+		};
+	};
+
+	markDoneTaskHandler = (data) => {
+		const { newTasksData, taskArrayIndex } = data;
+
+		newTasksData[taskArrayIndex].done = true;
+
+		return newTasksData;
+	};
+
+	removeTaskHandler = (data) => {
+		const { newTasksData, taskArrayIndex } = data;
+
+		newTasksData.splice(taskArrayIndex, 1);
+
+		return newTasksData;
+	};
+
+	changeTaskStatusHandler = (event, action) => {
+		let newTasksData;
+
+		const data = this.getTaskHandler(event);
+
+		if (action === "done") {
+			newTasksData = this.markDoneTaskHandler(data);
+		} else if (action === "delete") {
+			newTasksData = this.removeTaskHandler(data);
+		}
+
+		this.lsSetData(newTasksData, this.state.lastID);
+
+		this.setState({
+			tasksData: newTasksData
+		});
+	};
+
 	render() {
+		const doneList = this.state.isDoneListVisible ? <TaskList data={this.state.tasksData} isDone={true} /> : null;
+
 		return (
 			<main className="app">
 				<Background />
@@ -101,8 +165,17 @@ class App extends Component {
 					clearTasks={this.clearTasksDataHandler}
 					addTask={this.addTaskHandler}
 				/>
-				<TaskList data={this.state.tasksData} isDone={false} />
-				<TaskList data={this.state.tasksData} isDone={true} />
+				<TaskContext.Provider
+					value={{
+						changeTaskStatus: this.changeTaskStatusHandler
+					}}
+				>
+					<TaskList data={this.state.tasksData} isDone={false} />
+					<Btn styles="btn--done" click={this.showDoneListHandler}>
+						Show done tasks
+					</Btn>
+					{doneList}
+				</TaskContext.Provider>
 			</main>
 		);
 	}
