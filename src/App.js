@@ -32,7 +32,7 @@ class App extends Component {
 		}
 	}
 
-	//LS functions
+	// LocalStorage Functions
 	lsGetData = () => {
 		return {
 			data: JSON.parse(localStorage.getItem("tasksData")),
@@ -50,7 +50,7 @@ class App extends Component {
 		localStorage.removeItem("lastID");
 	};
 
-	// TaskForm methods
+	// TaskForm Methods
 	changeInputValueHandler = (event) => {
 		const newInput = event.target.value;
 
@@ -86,7 +86,7 @@ class App extends Component {
 				open: false
 			};
 
-			const newTasks = [ newTask, ...tasksData ];
+			const newTasks = [ ...tasksData, newTask ];
 
 			this.lsSetData(newTasks, newID);
 
@@ -100,7 +100,7 @@ class App extends Component {
 		}
 	};
 
-	// Show done list
+	// Show Done List
 	showDoneListHandler = () => {
 		const presentStatus = this.state.isDoneListVisible;
 
@@ -109,7 +109,7 @@ class App extends Component {
 		});
 	};
 
-	// TaskIcons methods
+	// Change Task Status Methods
 	getTaskHandler = (event) => {
 		const taskID = Number(event.target.closest(".task").getAttribute("id"));
 
@@ -151,6 +151,32 @@ class App extends Component {
 		return newTasksData;
 	};
 
+	prioritiseTaskHandler = (data) => {
+		let { newTasksData, taskArrayIndex } = data;
+
+		const eventTask = newTasksData.splice(taskArrayIndex, 1)[0];
+
+		newTasksData = [ eventTask, ...newTasksData ];
+
+		if (eventTask.priority) {
+			eventTask.priority = false;
+
+			const prioritiesArr = newTasksData.filter((task) => {
+				return task.priority === true;
+			});
+
+			const normalArr = newTasksData.filter((task) => {
+				return task.priority === false;
+			});
+
+			newTasksData = [ ...prioritiesArr, ...normalArr ];
+		} else {
+			eventTask.priority = true;
+		}
+
+		return newTasksData;
+	};
+
 	changeTaskStatusHandler = (event, action) => {
 		let newTasksData;
 
@@ -162,6 +188,25 @@ class App extends Component {
 			newTasksData = this.removeTaskHandler(data);
 		} else if (action === "open") {
 			newTasksData = this.openTaskHandler(data);
+		} else if (action === "priority") {
+			newTasksData = this.prioritiseTaskHandler(data);
+		}
+
+		this.lsSetData(newTasksData, this.state.lastID);
+
+		this.setState({
+			tasksData: newTasksData
+		});
+	};
+
+	// Update Task Methods
+	updateTaskHandler = (event, action) => {
+		let { newTasksData, taskArrayIndex } = this.getTaskHandler(event);
+
+		if (action === "description") {
+			newTasksData[taskArrayIndex].description = event.target.value;
+		} else if (action === "title") {
+			newTasksData[taskArrayIndex].title = event.target.value;
 		}
 
 		this.lsSetData(newTasksData, this.state.lastID);
@@ -185,7 +230,8 @@ class App extends Component {
 				/>
 				<TaskContext.Provider
 					value={{
-						changeTaskStatus: this.changeTaskStatusHandler
+						changeTaskStatus: this.changeTaskStatusHandler,
+						updateTask: this.updateTaskHandler
 					}}
 				>
 					<TaskList data={this.state.tasksData} isDone={false} />

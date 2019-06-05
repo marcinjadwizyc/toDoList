@@ -1,7 +1,7 @@
 import React from "react";
 
 const taskContext = React.createContext({
-	updateTask: () => {}
+	changeTaskStatus: () => {}
 });
 
 export default taskContext;
