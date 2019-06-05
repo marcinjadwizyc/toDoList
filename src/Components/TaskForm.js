@@ -26,10 +26,10 @@ const TaskForm = (props) => {
 };
 
 TaskForm.propTypes = {
-	value: PropTypes.string,
-	changeInputValue: PropTypes.func,
-	addTask: PropTypes.func,
-	clearTasks: PropTypes.func
+	inputValue: PropTypes.string.isRequired,
+	changeInputValue: PropTypes.func.isRequired,
+	addTask: PropTypes.func.isRequired,
+	clearTasks: PropTypes.func.isRequired
 };
 
 export default TaskForm;

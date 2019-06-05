@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import PropTypes from "prop-types";
 
 import TaskContext from "../../Context/taskContext";
 
@@ -21,6 +22,10 @@ const TaskInputs = (props) => {
 			/>
 		</div>
 	);
+};
+
+TaskInputs.propTypes = {
+	data: PropTypes.object.isRequired
 };
 
 export default TaskInputs;

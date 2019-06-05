@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import TaskIcons from "./TaskIcons";
 import TaskInputs from "./TaskInputs";
@@ -25,6 +26,10 @@ const Task = (props) => {
 			{inputs}
 		</li>
 	);
+};
+
+Task.propTypes = {
+	data: PropTypes.object.isRequired
 };
 
 export default Task;

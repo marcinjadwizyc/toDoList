@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import PropTypes from "prop-types";
 
 import TaskContext from "../../Context/taskContext";
 
@@ -29,6 +30,10 @@ const TaskIcons = (props) => {
 			/>
 		</div>
 	);
+};
+
+TaskIcons.propTypes = {
+	priorityTitle: PropTypes.string
 };
 
 export default TaskIcons;
