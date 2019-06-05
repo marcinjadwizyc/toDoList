@@ -33,7 +33,7 @@
 	display: none;
 }
 
-.task--done {
+.taskList--done .task {
 	.task__main {
 		text-decoration: line-through;
 		opacity: 0.8;

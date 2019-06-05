@@ -5,257 +5,241 @@ import TaskForm from "./Components/TaskForm";
 import TaskList from "./Components/TaskList";
 import Btn from "./Components/Btn";
 
+import TaskContext from "./Context/taskContext";
+
 class App extends Component {
 	state = {
-		doneListSwitch: false,
+		isDoneListVisible: false,
 		taskInputValue: "",
 		lastID: 10000,
 		tasksData: []
 	};
 
-	// LS methods
-	storageGetData = () => {
-		return {
-			lastID: JSON.parse(localStorage.getItem("lastID")),
-			tasksData: JSON.parse(localStorage.getItem("tasksData"))
-		};
-	};
-
-	storageSetData = (tasksArr) => {
-		localStorage.setItem("tasksData", JSON.stringify(tasksArr));
-		localStorage.setItem("lastID", this.state.lastID + 1);
-	};
-
-	// Get data on component mount
 	componentDidMount() {
-		const storageData = this.storageGetData();
+		let lsData = this.lsGetData();
 
-		if ((storageData.tasksData !== null) & (storageData.lastID !== null)) {
-			storageData.tasksData.map((task) => {
+		if (lsData.data !== null && lsData.lastID !== null) {
+			let { data, id } = lsData;
+
+			data.map((task) => {
 				task.open = false;
 			});
 
 			this.setState({
-				lastID: storageData.lastID,
-				tasksData: storageData.tasksData
+				tasksData: data,
+				lastID: id
 			});
 		}
 	}
 
-	// Utils methods
-	getTaskVariables = (event) => {
-		const taskVariables = {
-			taskDOM: event.target.parentElement.parentElement.parentElement,
-			taskID: Number(event.target.parentElement.parentElement.parentElement.getAttribute("id")),
-			tasksData: [ ...this.state.tasksData ]
+	// LocalStorage Functions
+	lsGetData = () => {
+		return {
+			data: JSON.parse(localStorage.getItem("tasksData")),
+			id: JSON.parse(localStorage.getItem("lastID"))
 		};
-
-		const taskIndex = taskVariables.tasksData.findIndex((task) => {
-			return task.id === taskVariables.taskID;
-		});
-
-		taskVariables.taskIndex = taskIndex;
-
-		return taskVariables;
 	};
 
-	getTaskInputVariables = (event) => {
-		const taskVariables = {
-			taskDOM: event.target.parentElement.parentElement,
-			taskID: Number(event.target.parentElement.parentElement.getAttribute("id")),
-			tasksData: [ ...this.state.tasksData ]
-		};
-
-		const taskIndex = taskVariables.tasksData.findIndex((task) => {
-			return task.id === taskVariables.taskID;
-		});
-
-		taskVariables.taskIndex = taskIndex;
-
-		return taskVariables;
+	lsSetData = (data, id) => {
+		localStorage.setItem("tasksData", JSON.stringify(data));
+		localStorage.setItem("lastID", JSON.stringify(id));
 	};
 
-	// Components methods
+	lsClearData = () => {
+		localStorage.removeItem("tasksData");
+		localStorage.removeItem("lastID");
+	};
+
+	// TaskForm Methods
 	changeInputValueHandler = (event) => {
+		const newInput = event.target.value;
+
 		this.setState({
-			taskInputValue: event.target.value
+			taskInputValue: newInput
 		});
 	};
 
-	addTaskHandler = (event) => {
+	clearTasksDataHandler = (event) => {
 		event.preventDefault();
 
-		const currentInput = this.state.taskInputValue;
-		const currentID = this.state.lastID;
-
-		if (currentInput.length > 0) {
-			const newTasksData = [
-				...this.state.tasksData,
-				{
-					title: currentInput,
-					description: "",
-					id: currentID + 1,
-					done: false,
-					priority: false,
-					open: false
-				}
-			];
-
-			this.storageSetData(newTasksData);
-
-			this.setState({
-				taskInputValue: "",
-				lastID: currentID + 1,
-				tasksData: newTasksData
-			});
-		}
-	};
-
-	removeTaskHandler = (event) => {
-		const taskVariables = this.getTaskVariables(event);
-
-		taskVariables.tasksData.splice(taskVariables.taskIndex, 1);
-
-		this.storageSetData(taskVariables.tasksData);
-
-		this.setState({
-			tasksData: taskVariables.tasksData
-		});
-	};
-
-	doneTaskHandler = (event) => {
-		const taskVariables = this.getTaskVariables(event);
-
-		taskVariables.tasksData[taskVariables.taskIndex].done = true;
-
-		this.storageSetData(taskVariables.tasksData);
-
-		this.setState({
-			tasksData: taskVariables.tasksData
-		});
-	};
-
-	clearTasksHandler = () => {
-		localStorage.removeItem("tasksData");
+		this.lsClearData();
 
 		this.setState({
 			tasksData: []
 		});
 	};
 
+	addTaskHandler = (event) => {
+		event.preventDefault();
+
+		const { lastID, tasksData, taskInputValue } = this.state;
+
+		const newID = lastID + 1;
+
+		if (taskInputValue !== "") {
+			const newTask = {
+				title: taskInputValue,
+				id: newID,
+				description: "",
+				priority: false,
+				done: false,
+				open: false
+			};
+
+			const newTasks = [ ...tasksData, newTask ];
+
+			this.lsSetData(newTasks, newID);
+
+			this.setState({
+				tasksData: newTasks,
+				lastID: newID,
+				taskInputValue: ""
+			});
+		} else {
+			alert("Please add a task below...");
+		}
+	};
+
+	// Show Done List
 	showDoneListHandler = () => {
-		const doneListStatus = this.state.doneListSwitch;
+		const presentStatus = this.state.isDoneListVisible;
 
 		this.setState({
-			doneListSwitch: !doneListStatus
+			isDoneListVisible: !presentStatus
 		});
 	};
 
-	priorityTaskHandler = (event) => {
-		const taskVariables = this.getTaskVariables(event);
+	// Change Task Status Methods
+	getTaskHandler = (event) => {
+		const taskID = Number(event.target.closest(".task").getAttribute("id"));
 
-		const taskWithEvent = taskVariables.tasksData.splice(taskVariables.taskIndex, 1);
+		const tasksData = [ ...this.state.tasksData ];
 
-		let newTasksData = [ ...taskWithEvent, ...taskVariables.tasksData ];
+		const taskArrayIndex = tasksData.findIndex((task) => {
+			return task.id === taskID;
+		});
 
-		if (taskVariables.taskDOM.classList.contains("task--priority")) {
-			taskWithEvent[0].priority = false;
+		return {
+			newTasksData: tasksData,
+			taskArrayIndex: taskArrayIndex
+		};
+	};
+
+	markDoneTaskHandler = (data) => {
+		const { newTasksData, taskArrayIndex } = data;
+
+		newTasksData[taskArrayIndex].done = true;
+
+		return newTasksData;
+	};
+
+	removeTaskHandler = (data) => {
+		const { newTasksData, taskArrayIndex } = data;
+
+		newTasksData.splice(taskArrayIndex, 1);
+
+		return newTasksData;
+	};
+
+	openTaskHandler = (data) => {
+		const { newTasksData, taskArrayIndex } = data;
+
+		const openValue = newTasksData[taskArrayIndex].open;
+
+		newTasksData[taskArrayIndex].open = !openValue;
+
+		return newTasksData;
+	};
+
+	prioritiseTaskHandler = (data) => {
+		let { newTasksData, taskArrayIndex } = data;
+
+		const eventTask = newTasksData.splice(taskArrayIndex, 1)[0];
+
+		newTasksData = [ eventTask, ...newTasksData ];
+
+		if (eventTask.priority) {
+			eventTask.priority = false;
 
 			const prioritiesArr = newTasksData.filter((task) => {
 				return task.priority === true;
 			});
 
-			const pendingArr = newTasksData.filter((task) => {
+			const normalArr = newTasksData.filter((task) => {
 				return task.priority === false;
 			});
 
-			newTasksData = [ ...prioritiesArr, ...pendingArr ];
+			newTasksData = [ ...prioritiesArr, ...normalArr ];
 		} else {
-			taskWithEvent[0].priority = true;
+			eventTask.priority = true;
 		}
 
-		this.storageSetData(newTasksData);
+		return newTasksData;
+	};
+
+	changeTaskStatusHandler = (event, action) => {
+		let newTasksData;
+
+		const data = this.getTaskHandler(event);
+
+		if (action === "done") {
+			newTasksData = this.markDoneTaskHandler(data);
+		} else if (action === "delete") {
+			newTasksData = this.removeTaskHandler(data);
+		} else if (action === "open") {
+			newTasksData = this.openTaskHandler(data);
+		} else if (action === "priority") {
+			newTasksData = this.prioritiseTaskHandler(data);
+		}
+
+		this.lsSetData(newTasksData, this.state.lastID);
 
 		this.setState({
 			tasksData: newTasksData
 		});
 	};
 
-	openTaskHandler = (event) => {
-		const taskVariables = this.getTaskVariables(event);
+	// Update Task Methods
+	updateTaskHandler = (event, action) => {
+		let { newTasksData, taskArrayIndex } = this.getTaskHandler(event);
 
-		if (taskVariables.tasksData[taskVariables.taskIndex].done === false) {
-			taskVariables.tasksData[taskVariables.taskIndex].open = !taskVariables.tasksData[taskVariables.taskIndex]
-				.open;
-
-			this.setState({
-				tasksData: taskVariables.tasksData
-			});
+		if (action === "description") {
+			newTasksData[taskArrayIndex].description = event.target.value;
+		} else if (action === "title") {
+			newTasksData[taskArrayIndex].title = event.target.value;
 		}
-	};
 
-	changeTaskTitleHandler = (event) => {
-		const taskVariables = this.getTaskInputVariables(event);
-
-		taskVariables.tasksData[taskVariables.taskIndex].title = event.target.value;
-
-		this.storageSetData(taskVariables.tasksData);
+		this.lsSetData(newTasksData, this.state.lastID);
 
 		this.setState({
-			tasksData: taskVariables.tasksData
-		});
-	};
-
-	changeTaskDescriptionHandler = (event) => {
-		const taskVariables = this.getTaskInputVariables(event);
-
-		taskVariables.tasksData[taskVariables.taskIndex].description = event.target.value;
-
-		this.storageSetData(taskVariables.tasksData);
-
-		this.setState({
-			tasksData: taskVariables.tasksData
+			tasksData: newTasksData
 		});
 	};
 
 	render() {
-		let doneList;
-
-		doneList = this.state.doneListSwitch ? (
-			<TaskList
-				tasksData={this.state.tasksData}
-				doneList={true}
-				removeTaskFunc={this.removeTaskHandler}
-				doneTaskFunc={this.doneTaskHandler}
-				openTaskFunc={this.openTaskHandler}
-				changeTaskTitleFunc={this.changeTaskTitleHandler}
-				changeTaskDescriptionFunc={this.changeTaskDescriptionHandler}
-			/>
-		) : null;
+		const doneList = this.state.isDoneListVisible ? <TaskList data={this.state.tasksData} isDone={true} /> : null;
 
 		return (
 			<main className="app">
 				<Background />
 				<TaskForm
-					taskInputValue={this.state.taskInputValue}
-					inputChangeFunc={this.changeInputValueHandler}
-					submitFormFunc={this.addTaskHandler}
-					clearTasksFunc={this.clearTasksHandler}
+					inputValue={this.state.taskInputValue}
+					changeInputValue={this.changeInputValueHandler}
+					clearTasks={this.clearTasksDataHandler}
+					addTask={this.addTaskHandler}
 				/>
-				<TaskList
-					tasksData={this.state.tasksData}
-					doneList={false}
-					removeTaskFunc={this.removeTaskHandler}
-					doneTaskFunc={this.doneTaskHandler}
-					priorityTaskFunc={this.priorityTaskHandler}
-					openTaskFunc={this.openTaskHandler}
-					changeTaskTitleFunc={this.changeTaskTitleHandler}
-					changeTaskDescriptionFunc={this.changeTaskDescriptionHandler}
-				/>
-				<Btn styles="btn--finished" clickFunc={this.showDoneListHandler}>
-					Show done tasks
-				</Btn>
-				{doneList}
+				<TaskContext.Provider
+					value={{
+						changeTaskStatus: this.changeTaskStatusHandler,
+						updateTask: this.updateTaskHandler
+					}}
+				>
+					<TaskList data={this.state.tasksData} isDone={false} />
+					<Btn styles="btn--done" click={this.showDoneListHandler}>
+						Show done tasks
+					</Btn>
+					{doneList}
+				</TaskContext.Provider>
 			</main>
 		);
 	}
